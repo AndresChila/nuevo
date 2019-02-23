@@ -75,6 +75,7 @@
     <Compile Include="ValidacionesCrudAdmin.cs" />
     <Compile Include="ValidacionesCrudCliente.cs" />
     <Compile Include="ValidacionesCRUDProducto.cs" />
+    <Compile Include="ValidacionesCRUDVendedor.cs" />
     <Compile Include="ValidarMasterAdmin.cs" />
     <Compile Include="ValidarMasterVendedor.cs" />
   </ItemGroup>
