@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Datos;
 
 public partial class View_RecuperarContraseña : System.Web.UI.Page
 {
@@ -42,7 +43,7 @@ public partial class View_RecuperarContraseña : System.Web.UI.Page
         a = TB_Repetir.Text;
         if(TB_Repetir.Text == Tb_Contraseña.Text)
         {
-            user.actualziarContrasena(eUser);
+            user.actualziarContrasena(eUser.UserId.ToString(), eUser.Clave);
 #pragma warning disable CS0618 // Type or member is obsolete
             RegisterStartupScript("mensaje", "<script type='text/javascript'>alert('Su contraseña ha sido actualizada.');window.location=\"NuevoLogin.aspx\"</script>");
 #pragma warning disable CS0618 // Type or member is obsolete      

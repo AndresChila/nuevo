@@ -377,7 +377,7 @@ namespace Datos
             return Usuario;
         }
 
-        public DataTable actualziarContrasena(UUsuario datos)
+        public DataTable actualziarContrasena(string usuario, string clave)
         {
             DataTable Usuario = new DataTable();
             NpgsqlConnection conection = new NpgsqlConnection(ConfigurationManager.ConnectionStrings["Postgres"].ConnectionString);
@@ -386,8 +386,8 @@ namespace Datos
             {
                 NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter("usuario.f_actualizar_contrasena", conection);
                 dataAdapter.SelectCommand.CommandType = CommandType.StoredProcedure;
-                dataAdapter.SelectCommand.Parameters.Add("_cedula", NpgsqlDbType.Integer).Value = datos.Usuario;
-                dataAdapter.SelectCommand.Parameters.Add("_clave", NpgsqlDbType.Varchar).Value = datos.Clave;
+                dataAdapter.SelectCommand.Parameters.Add("_cedula", NpgsqlDbType.Integer).Value = usuario;
+                dataAdapter.SelectCommand.Parameters.Add("_clave", NpgsqlDbType.Varchar).Value = clave;
 
                 conection.Open();
                 dataAdapter.Fill(Usuario);

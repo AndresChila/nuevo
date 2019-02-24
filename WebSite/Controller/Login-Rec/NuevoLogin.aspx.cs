@@ -7,6 +7,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 using Utilitarios;
 using Logica;
+using Datos;
 
 public partial class View_NuevoLogin : System.Web.UI.Page
 { 
@@ -27,7 +28,7 @@ public partial class View_NuevoLogin : System.Web.UI.Page
         user = log.loguear(TB_Cedula.Text.ToString(), TB_Clave.Text.ToString());
             
         DAOUsuario guardarUsuario = new DAOUsuario();
-        DataTable data = guardarUsuario.loggin(user.Usuario, user.Clave);
+        DataTable data = guardarUsuario.loggin(user);
 
         user = new CoreUser().autenticar(user);
 
