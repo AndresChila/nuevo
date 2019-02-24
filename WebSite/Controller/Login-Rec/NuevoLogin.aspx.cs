@@ -31,7 +31,6 @@ public partial class View_NuevoLogin : System.Web.UI.Page
 
         user = new CoreUser().autenticar(user);
 
-
         Session["clave"] = user.Clave;
         Session["user_id"] = user.Usuario;
         Session["nombre_rol"] = user.Nombre_rol;

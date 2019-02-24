@@ -12,7 +12,6 @@ namespace Logica
     {
         public ValidacionesCRUDProducto()
         {
-
         }
         string mensaje = "Datos correctos. Puede ingresar";
         bool validarLlenoAgregar(string refp, string precio, string cantidad)
@@ -71,7 +70,7 @@ namespace Logica
                         producto.Talla = Convert.ToDouble(talla);
                         if (producto.Precio <= 0 || producto.Cantidad <= 0)
                         {
-                            mensaje = "Ingrese un valo mayor a 0.";
+                            mensaje = "Ingrese un valor mayor a 0.";
                             return;
                         }
                         producto2.Referencia = refp;
@@ -107,30 +106,28 @@ namespace Logica
         {
             return mensaje;
         }
-
-        /*public Producto RowCommand(string name, string argument)
+        Producto producto = new Producto();
+        public void RowCommand(string name, string argument, int r)
         {
-            DAOUsuario dAO = new DAOUsuario();
-                        
+            DAOUsuario dAO = new DAOUsuario();                        
             if(name.Equals("Delete"))
             {
                 int id = Convert.ToInt32(argument);
                 dAO.eliminarProducto(id);
+                this.SetProducto(0);
             }
             if (name.Equals("Editar"))
             {
-                this.Seleccionar_Producto(Convert.ToInt32(argument));
+                this.SetProducto(Convert.ToInt32(argument));
             }
-
         }
-///////////////////////////////////////////////////////////////
-        public Producto Seleccionar_Producto(int r)
+
+        public void SetProducto(int r)
         {
-            DAOUsuario dAO = new DAOUsuario();
-            Producto producto = new Producto();
+            DAOUsuario dAO = new DAOUsuario();            
             int refe = r;
             DataTable productos = dAO.verProductosEditar(refe);
-            if (productos != null)
+            if (productos != null && r > 0)
             {
                 foreach (DataRow row in productos.Rows)
                 {
@@ -140,15 +137,65 @@ namespace Logica
                     producto.Precio = Convert.ToDouble(row["precio"]);
                 }
             }
-            Session["compara"] = Convert.ToString(producto.Cantidad);
-            TB_EditarReferencia.Text = producto.Referencia;
-            TB_EditarCantidad.Text = Convert.ToString(producto.Cantidad);
-            TB_EditarPrecio.Text = Convert.ToString(producto.Precio);
-            DL_EditarTallas.SelectedValue = Convert.ToString(producto.Talla);
-            B_EditarProducto.Enabled = true;
-            B_Cancelar.Enabled = true;
+            else
+            {
+                producto.Referencia = "";
+                producto.Cantidad = 0;
+                producto.Talla = 0;
+                producto.Precio = 0;
+            }              
+        }
 
-        }*/
+        public Producto GetProducto()
+        {
+            return producto;
+        }
 
+        public void EditarProducto(string refp, string precio, string cantidad, string talla, int id, string com)
+        {
+            if (validarLlenoAgregar(refp, precio, cantidad) == true)
+            {
+                if (validarNumeros(cantidad) == true)
+                {
+                    if (validarNumeros(precio) == true)
+                    {
+                        DAOUsuario dAO = new DAOUsuario();
+                        Producto producto = new Producto();
+                        Producto producto2 = new Producto();
+                        producto.Referencia = refp;
+                        producto.Cantidad = Convert.ToInt64(cantidad);
+                        producto.Precio = Convert.ToDouble(precio);
+                        producto.Talla = Convert.ToDouble(talla);
+                        producto.Idproducto = id;
+                        if (producto.Precio <= 0 || producto.Cantidad <= 0)
+                        {
+                            mensaje = "Ingrese un valor mayor a cero";
+                            return;
+                        }
+                        string comp = com;
+                        
+                        if (Convert.ToInt32(producto.Cantidad) < Convert.ToInt32(comp))
+                        {
+                            mensaje = "El numero de elementos de esta referencia debe ser mayor o igual a los ya existente.";
+                        }
+                        else
+                        {
+                            dAO.editarProducto(producto);
+                            mensaje = "Producto editado exitosamente.";
+                        }
+                    }
+                    else
+                    {
+                    }
+                }
+                else
+                {
+                }
+            }
+            else
+            {
+            }            
+        }
     }
 }
+///////////////////arreglado
