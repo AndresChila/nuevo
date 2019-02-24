@@ -8,9 +8,13 @@ using Datos;
 
 namespace Logica
 {
+
     public class ValidacionesCrudCliente
     {
+        public ValidacionesCrudCliente()
+        {
 
+        }
         DAOUsuario dao = new DAOUsuario();
         Cliente cliente = new Cliente();
         DataTable cli = new DataTable();
@@ -41,11 +45,11 @@ namespace Logica
 
             if (accion == "guardar")
             {
-                mensaje = hacertodoagregar();
+                hacertodoagregar();
             }
             if (accion == "editar")
             {
-                mensaje = hacertodoeditar();
+                hacertodoeditar();
             }
         }
 
@@ -89,69 +93,76 @@ namespace Logica
             }
         }
 
-        public string hacertodoagregar()
+        public void hacertodoagregar()
         {
             if (validarLlenoAgregar(cedula, nombre, apellido, direccion, telefono) == true)
             {
-                if (validarNumeros(cedula) == true)
+                if (validarExitente(cedula))
                 {
-                    if (resultadoNombre == true)
+                    if (validarNumeros(cedula) == true)
                     {
-                        if (resultadoApellido == true)
+                        if (resultadoNombre == true)
                         {
-                            if (validarNumeros(telefono) == true)
+                            if (resultadoApellido == true)
                             {
-                                cliente.Cedula = Convert.ToInt32(cedula);
-                                cliente.Nombre = nombre;
-                                cliente.Apellido = apellido;
-                                cliente.Direccion = direccion;
-                                cliente.Telefono = Convert.ToInt64(telefono);
-                                cliente.Sexo = sexo;
-                                if (cliente.Cedula <= 0 || cliente.Telefono <= 0)
+                                if (validarNumeros(telefono) == true)
                                 {
-                                    mensaje = "Ingrese los datos del teléfono correctamente.";
-                                    return mensaje;
+                                    cliente.Cedula = Convert.ToInt32(cedula);
+                                    cliente.Nombre = nombre;
+                                    cliente.Apellido = apellido;
+                                    cliente.Direccion = direccion;
+                                    cliente.Telefono = Convert.ToInt64(telefono);
+                                    cliente.Sexo = sexo;
+                                    if (cliente.Cedula <= 0 || cliente.Telefono <= 0)
+                                    {
+                                        mensaje = "Ingrese los datos del teléfono correctamente.";
+                                        return;
+                                    }
+                                    dao.CrearCliente(cliente);
+                                    mensaje = "Cliente registrado exitosamente.";
+
+                                    cedula = "";
+                                    nombre = "";
+                                    apellido = "";
+                                    direccion = "";
+                                    telefono = "";
+
                                 }
-                                dao.CrearCliente(cliente);
-                                mensaje = "Cliente registrado exitosamente.";
-
-                                cedula = "";
-                                nombre = "";
-                                apellido = "";
-                                direccion = "";
-                                telefono = "";
-
+                                else
+                                {
+                                    mensaje = "Ingrese el telefono del Cliente correctamente";
+                                    return;
+                                }
                             }
                             else
                             {
-                                mensaje = "Ingrese el telefono del Cliente correctamente";
-                                return mensaje;
+                                mensaje = "Ingrese el apellido del Cliente correctamente.";
+                                return;
                             }
                         }
                         else
                         {
-                            mensaje = "Ingrese el apellido del Cliente correctamente.";
-                            return mensaje;
+                            mensaje = "Ingrese el nombre del Cliente correctamente.";
+                            return;
                         }
                     }
                     else
                     {
-                        mensaje = "Ingrese el nombre del Cliente correctamente.";
-                        return mensaje;
+                        mensaje = "Ingrese la cedula del Cliente correctamente.";
+                        return;
                     }
                 }
                 else
                 {
-                    mensaje = "Ingrese la cedula del Cliente correctamente.";
-                    return mensaje;
+                    mensaje = "Cliente Ya Existeee!.";
+                    return;
                 }
             }
             else
             {
                 mensaje = "Ingrese todos los datos.";
-                return mensaje;
+                return;
             }
-            return mensaje;
         }
 
         public string devuelvemensaje()
@@ -159,7 +170,7 @@ namespace Logica
             return mensaje;
         }
 
-        public string hacertodoeditar()
+        public void hacertodoeditar()
         {
             if (validarLlenoEditar() == true)
             {
@@ -180,10 +191,10 @@ namespace Logica
                                 cliente2.Direccion = direccione;
                                 cliente2.Telefono = Convert.ToInt64(telefonoe);
                                 cliente2.Sexo = sexoe;
-                                if (cliente.Cedula <= 0 || cliente.Telefono <= 0)
+                                if (cliente2.Cedula <= 0 || cliente2.Telefono <= 0)
                                 {
                                     mensaje = "Ingrese los datos correctamente.";
-                                    return mensaje;
+                                    return;
                                 }
                                 dao.actualizarCliente(cliente2);
 
@@ -195,35 +206,93 @@ namespace Logica
                             }
                             else
                             {
-                               mensaje = "Ingrese el telefono del Cliente correctamente.";
-                                return mensaje;
+                                mensaje = "Ingrese el telefono del Cliente correctamente.";
+                                return;
                             }
                         }
                         else
                         {
                             mensaje = "Ingrese el apellido del Cliente correctamente.";
-                            return mensaje;
+                            return;
                         }
                     }
                     else
                     {
                         mensaje = "Ingrese el nombre del Cliente correctamente.";
-                        return mensaje;
+                        return;
                     }
                 }
                 else
                 {
                     mensaje = "Ingrese la cedula del Cliente correctamente.";
-                    return mensaje;
+                    return;
                 }
             }
             else
             {
                 mensaje = "Ingrese todos los datos.";
-                return mensaje;
-            }
-            return mensaje;
+                return;
+            }           
         }
 
+        Cliente clientico = new Cliente();
+        public void RowCommand(string name, string argument)
+        {
+            DAOUsuario dAO = new DAOUsuario();
+            if (name.Equals("Eliminar"))
+            {
+                int id = Convert.ToInt32(argument);
+                dao.eliminarCliente(id);
+                this.SetCliente(0);
+            }
+            if (name.Equals("Editar"))
+            {
+                this.SetCliente(Convert.ToInt32(argument));
+            }
         }
+
+        public void SetCliente(int r)
+        {
+            DAOUsuario dAO = new DAOUsuario();
+            int id = r;
+            DataTable clientes = dAO.verClientesEditar(id);
+            if (clientes != null && r > 0)
+            {
+                foreach (DataRow row in clientes.Rows)
+                {
+                    clientico.Cedula = Convert.ToInt32(row["cedula"]);
+                    clientico.Nombre = Convert.ToString(row["nombre"]);
+                    clientico.Apellido = Convert.ToString(row["apellido"]);
+                    clientico.Direccion = Convert.ToString(row["direccion"]);
+                    clientico.Telefono = Convert.ToInt32(row["telefono"]);                    
+                }
+            }
+            else
+            {
+                clientico.Cedula = 0;
+                clientico.Nombre = "";
+                clientico.Apellido = "";
+                clientico.Direccion = "";
+                clientico.Telefono = 0;
+            }
+        }
+
+        public Cliente Get_Clientico()
+        {
+            return clientico;
+        }
+        public bool validarExitente(string cedula)
+        {
+            DataTable cl = new DataTable();
+            cl = dao.traerClientes();
+            for(int i = 0; i < cl.Rows.Count; i++)
+            {
+                if(cl.Rows[i]["cedula"].ToString() == cedula){
+                    return false;
+                }
+
+            }
+            return true;
+        }
+    }    
 }

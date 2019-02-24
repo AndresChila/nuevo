@@ -18,6 +18,8 @@ public partial class View_Tienda_CRUDVendedor : System.Web.UI.Page
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        ValidarMasterAdmin val = new ValidarMasterAdmin();
+        //Response.Redirect(val.validarSession(Session["user_id"].ToString(), Session["clave"].ToString(), Session["rol_id"].ToString(), Session["sede"].ToString()));
         usu = dao.traerUsuarios2(Session["sede"].ToString());
         GV_Productos.DataSource = usu;
         GV_Productos.DataBind();

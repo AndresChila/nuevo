@@ -171,6 +171,7 @@ namespace Datos
             }
             catch (Exception Ex)
             {
+                if(Ex.Message != "Tipo de almacenamiento no válido: DBNull.")
                 throw Ex;
             }
             finally
@@ -183,7 +184,7 @@ namespace Datos
 
         }
 
-        public void eliminarCliente(Cliente cliente)
+        public void eliminarCliente(int cedula)
         {
             DataTable Cliente = new DataTable();
             NpgsqlConnection conection = new NpgsqlConnection(ConfigurationManager.ConnectionStrings["Postgres"].ConnectionString);
@@ -192,7 +193,7 @@ namespace Datos
             {
                 NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter("tienda.eliminar_cliente", conection);
                 dataAdapter.SelectCommand.CommandType = CommandType.StoredProcedure;
-                dataAdapter.SelectCommand.Parameters.Add("_cedula", NpgsqlDbType.Integer).Value = cliente.Cedula;
+                dataAdapter.SelectCommand.Parameters.Add("_cedula", NpgsqlDbType.Integer).Value = cedula;
 
 
                 conection.Open();
@@ -2429,5 +2430,36 @@ namespace Datos
             }
             return usuario;
         }
+
+        public DataTable verClientesEditar(int id)
+        {
+            DataTable productos = new DataTable();
+            NpgsqlConnection conection = new NpgsqlConnection(ConfigurationManager.ConnectionStrings["Postgres"].ConnectionString);
+
+            try
+            {
+                NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter("tienda.f_verclienteseditar", conection);
+                dataAdapter.SelectCommand.CommandType = CommandType.StoredProcedure;
+                dataAdapter.SelectCommand.Parameters.Add("_id", NpgsqlDbType.Integer).Value = id;
+
+                conection.Open();
+                dataAdapter.Fill(productos);
+            }
+            catch (Exception Ex)
+            {
+                throw Ex;
+            }
+            finally
+            {
+                if (conection != null)
+                {
+                    conection.Close();
+                }
+            }
+            return productos;
+
+        }
     }
+
+    
 }

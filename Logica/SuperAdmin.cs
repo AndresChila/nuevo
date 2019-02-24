@@ -20,7 +20,7 @@ namespace Logica
             }
             else
             {
-                return "../Tienda/AgregarSede.aspx";
+                return "../Tienda/CRUDProducto.aspx";
             }
         }
     }

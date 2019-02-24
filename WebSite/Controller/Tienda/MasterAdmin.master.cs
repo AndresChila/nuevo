@@ -5,24 +5,16 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Datos;
+using Logica;
 
 public partial class View_Tienda_MasterAdmin : System.Web.UI.MasterPage
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-        
-        if (Session["user_id"] == null || Session["clave"] == null|| Convert.ToInt32(Session["rol_id"]) != 2  )
-        {
-            this.cerrarSesion();
-            Response.Redirect("../Login-Rec/NuevoLogin.aspx");
-        }
-        else
-        {
-            Label_usuario.Text = Session["nombre"].ToString();
-            Label_Sede.Text = Session["sede"].ToString();
-            
-        }
-        
+        ValidarMasterAdmin val = new ValidarMasterAdmin();
+        //Response.Redirect(val.validarSession(Session["user_id"].ToString(), Session["clave"].ToString(), Session["rol_id"].ToString(), Session["sede"].ToString()));
+        Label_usuario.Text = Session["nombre"].ToString();
+        Label_Sede.Text = Session["sede"].ToString();
     }
 
     protected void LinkButton8_Click(object sender, EventArgs e)

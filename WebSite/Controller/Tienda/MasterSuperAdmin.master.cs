@@ -12,8 +12,7 @@ public partial class View_Tienda_MasterTienda : System.Web.UI.MasterPage
     protected void Page_Load(object sender, EventArgs e)
     {
         SuperAdmin superAdmin = new SuperAdmin();
-        Response.Redirect(superAdmin.validarSession(Session["user_id"].ToString(), Session["clave"].ToString(), Convert.ToInt32(Session["rol_id"])));
-        
+        //Response.Redirect(superAdmin.validarSession(Session["user_id"].ToString(), Session["clave"].ToString(), Convert.ToInt32(Session["rol_id"])));        
         Label_Usuario.Text = Session["nombre"].ToString();
         L_Sede.Text = Session["sede"].ToString();
         this.notificaciones();

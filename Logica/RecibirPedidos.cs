@@ -11,7 +11,7 @@ namespace Logica
     public class RecibirPedidos
     {
         string mensaje, idAsig;
-        DataTable datosAsignacion, compara, compara2, paginar, paginar2, idAsignDT; 
+        DataTable datosAsignacion, compara, compara2, paginar, paginar2, idAsignDT;
 
         public RecibirPedidos(DataTable datosAsignacion, DataTable paginar, DataTable paginar2, DataTable idAsignDT, string idAsig)
         {
@@ -21,7 +21,7 @@ namespace Logica
             this.idAsignDT = idAsignDT;
             this.idAsig = idAsig;
         }
-        
+
         public string actualizarAsignaciones()
         {
             DAOUsuario dAO = new DAOUsuario();
@@ -67,7 +67,7 @@ namespace Logica
                     idAsig = Convert.ToString(comandArgument);
                     idAsignDT.Equals(idAsig);
                 }
-                
+
             }
         }
 
@@ -122,7 +122,7 @@ namespace Logica
             }*/
             return mensaje;
         }
-               
+
 
 
 

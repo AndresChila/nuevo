@@ -15,6 +15,13 @@
         .auto-style19 {
             height: 28px;
         }
+        .auto-style20 {
+            width: 100px;
+            height: 26px;
+        }
+        .auto-style21 {
+            height: 26px;
+        }
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
@@ -79,8 +86,18 @@
         <tr>
             <td class="auto-style17">&nbsp;</td>
             <td>
-                    <asp:GridView ID="GV_Clientes" runat="server" AllowPaging="True" AutoGenerateColumns="False" BackColor="White" BorderColor="#3366CC" BorderStyle="None" BorderWidth="1px" CellPadding="4" EmptyDataText="No hay clientes ingresados." CssClass="auto-style10" OnPageIndexChanging="GV_Clientes_PageIndexChanging" PageSize="5">
+                    <asp:GridView ID="GV_Clientes" runat="server" AllowPaging="True" AutoGenerateColumns="False" BackColor="White" BorderColor="#3366CC" BorderStyle="None" BorderWidth="1px" CellPadding="4" EmptyDataText="No hay clientes ingresados." CssClass="auto-style10" OnPageIndexChanging="GV_Clientes_PageIndexChanging" PageSize="5" OnRowCommand="GV_Clientes_RowCommand">
                         <Columns>
+                            <asp:TemplateField HeaderText="Eliminar" ShowHeader="False">
+                                <ItemTemplate>
+                                    <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="False" CommandName="Eliminar" Text="Eliminar" CommandArgument = '<%# Bind("cedula") %>'></asp:LinkButton>
+                                </ItemTemplate>
+                            </asp:TemplateField>
+                            <asp:TemplateField HeaderText="Editar" ShowHeader="False">
+                                <ItemTemplate>
+                                    <asp:LinkButton ID="LinkButton2" runat="server" CausesValidation="False" CommandName="Editar" Text="Seleccionar" CommandArgument = '<%# Bind("cedula") %>'></asp:LinkButton>
+                                </ItemTemplate>
+                            </asp:TemplateField>
                             <asp:TemplateField HeaderText="Cedula">
                                 <EditItemTemplate>
                                     <asp:TextBox ID="TextBox1" runat="server" Text='<%# Bind("cedula") %>'></asp:TextBox>
@@ -150,13 +167,10 @@
         </tr>
         <tr>
             <td class="auto-style17">&nbsp;</td>
-            <td>Seleccione una cedula a editar:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <asp:DropDownList ID="DropDownList1" runat="server">
-                </asp:DropDownList>
+            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             </td>
             <td>
-                <asp:Button ID="B_Seleccionar" runat="server" Text="Seleccionar" OnClick="B_Seleccionar_Click" />
                 <br />
-                <asp:Button ID="B_Eliminar" runat="server" Text="Eliminar" OnClick="B_Eliminar_Click" />
             </td>
         </tr>
         <tr>
@@ -167,7 +181,7 @@
         <tr>
             <td class="auto-style17">Cedula:</td>
             <td>
-                <asp:TextBox ID="TB_Cedula0" runat="server"></asp:TextBox>
+                <asp:TextBox ID="TB_Cedula0" runat="server" Enabled="False"></asp:TextBox>
             </td>
             <td>&nbsp;</td>
         </tr>
@@ -200,14 +214,14 @@
             <td>&nbsp;</td>
         </tr>
         <tr>
-            <td class="auto-style17">Sexo:</td>
-            <td>
-                <asp:DropDownList ID="D_Sexo0" runat="server">
+            <td class="auto-style20">Sexo:</td>
+            <td class="auto-style21">
+                <asp:DropDownList ID="D_Sexo0" runat="server" Enabled="False">
                         <asp:ListItem>Hombre</asp:ListItem>
                         <asp:ListItem>Mujer</asp:ListItem>
                 </asp:DropDownList>
             </td>
-            <td>&nbsp;</td>
+            <td class="auto-style21"></td>
         </tr>
         <tr>
             <td class="auto-style17">&nbsp;</td>
