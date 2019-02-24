@@ -39,7 +39,7 @@
                 <td>&nbsp;</td>
                 <td>
                     <asp:Label ID="Label4" runat="server" Text="Cantidad"></asp:Label>
-                </td>
+                </td>pepapig
                 <td>
                     <asp:TextBox ID="TB_Cantidad" runat="server" MaxLength="3"></asp:TextBox>
                 </td>
@@ -147,7 +147,7 @@
                         <SortedDescendingCellStyle BackColor="#D6DFDF" />
                         <SortedDescendingHeaderStyle BackColor="#002876" />
                     </asp:GridView>
-                    <asp:ObjectDataSource ID="ObjectDataSource2" runat="server" DeleteMethod="eliminarProducto" SelectMethod="verProductos" TypeName="DAOUsuario">
+                    <asp:ObjectDataSource ID="ObjectDataSource2" runat="server" DeleteMethod="eliminarProducto" SelectMethod="verProductos" TypeName="Datos.DAOUsuario">
                         <DeleteParameters>
                             <asp:Parameter Name="idproducto" Type="Int32" />
                         </DeleteParameters>

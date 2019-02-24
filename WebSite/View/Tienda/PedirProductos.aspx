@@ -60,7 +60,7 @@
                                 <asp:TextBox ID="TextBox2" runat="server" Text='<%# Bind("referenciaproducto") %>'></asp:TextBox>
                             </EditItemTemplate>
                             <ItemTemplate>
-                                <asp:Label ID="L_Referencia" runat="server" Text='<%# Bind("referenciaproducto") %>'></asp:Label>
+                                <asp:Label ID="L_Referencia" runat="server" Text='<%# Bind("referencia") %>'></asp:Label>
                             </ItemTemplate>
                         </asp:TemplateField>
                         <asp:TemplateField HeaderText="Talla">
@@ -177,7 +177,7 @@
         <tr>
             <td class="auto-style18">&nbsp;</td>
             <td class="auto-style17">
-                <asp:ObjectDataSource ID="ObjectDataSource4" runat="server" SelectMethod="Productos" TypeName="DAOUsuario"></asp:ObjectDataSource>
+                <asp:ObjectDataSource ID="ObjectDataSource4" runat="server" SelectMethod="Productos" TypeName="Datos.DAOUsuario"></asp:ObjectDataSource>
             </td>
             <td class="auto-style17">
                 &nbsp;</td>

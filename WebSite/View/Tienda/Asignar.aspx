@@ -127,7 +127,7 @@
                 <div class="auto-style30">
                 <asp:GridView ID="GV_ProductosBodega" runat="server" AutoGenerateColumns="False" DataSourceID="ObjectDataSource4" BackColor="White" BorderColor="#3366CC" BorderStyle="None" BorderWidth="1px" CellPadding="4">
                     <Columns>
-                        <asp:BoundField DataField="ReferenciaProducto" HeaderText="ReferenciaProducto" SortExpression="ReferenciaProducto" />
+                        <asp:BoundField DataField="referencia" HeaderText="referencia" SortExpression="referencia" />
                         <asp:BoundField DataField="Cantidad" HeaderText="Cantidad" SortExpression="Cantidad" />
                         <asp:BoundField DataField="Talla" HeaderText="Talla" SortExpression="Talla" />
                         <asp:BoundField DataField="Precio" HeaderText="Precio" SortExpression="Precio" />
@@ -145,7 +145,7 @@
                     <SortedDescendingHeaderStyle BackColor="#002876" />
                 </asp:GridView>
                 </div>
-                <asp:ObjectDataSource ID="ObjectDataSource4" runat="server" SelectMethod="Productos" TypeName="DAOUsuario"></asp:ObjectDataSource>
+                <asp:ObjectDataSource ID="ObjectDataSource4" runat="server" SelectMethod="Productos" TypeName="Datos.DAOUsuario"></asp:ObjectDataSource>
             </td>
             <td class="auto-style13">
                 &nbsp;</td>
@@ -208,7 +208,7 @@
                     <SortedDescendingHeaderStyle BackColor="#002876" />
                 </asp:GridView>
                 <asp:ObjectDataSource ID="ObjectDataSource2" runat="server"></asp:ObjectDataSource>
-                <asp:ObjectDataSource ID="ObjectDataSource5" runat="server" SelectMethod="verPedido" TypeName="DAOUsuario"></asp:ObjectDataSource>
+                <asp:ObjectDataSource ID="ObjectDataSource5" runat="server" SelectMethod="verPedido" TypeName="Datos.DAOUsuario"></asp:ObjectDataSource>
             </td>
             <td class="auto-style28">
                 <asp:GridView ID="GV_Pedidos" runat="server" AutoGenerateColumns="False" BackColor="White" BorderColor="#3366CC" BorderStyle="None" BorderWidth="1px" CellPadding="4" EmptyDataText="Seleccione un pedido para ver su detalle." Width="326px">
@@ -292,10 +292,10 @@
                     <Columns>
                         <asp:TemplateField HeaderText="Referencia">
                             <EditItemTemplate>
-                                <asp:TextBox ID="TextBox2" runat="server" Text='<%# Bind("ReferenciaProducto") %>'></asp:TextBox>
+                                <asp:TextBox ID="TextBox2" runat="server" Text='<%# Bind("referencia") %>'></asp:TextBox>
                             </EditItemTemplate>
                             <ItemTemplate>
-                                <asp:Label ID="L_Referencia" runat="server" Text='<%# Bind("ReferenciaProducto") %>'></asp:Label>
+                                <asp:Label ID="L_Referencia" runat="server" Text='<%# Bind("referencia") %>'></asp:Label>
                             </ItemTemplate>
                         </asp:TemplateField>
                         <asp:TemplateField HeaderText="Talla">
@@ -325,7 +325,7 @@
                     <SortedDescendingCellStyle BackColor="#D6DFDF" />
                     <SortedDescendingHeaderStyle BackColor="#002876" />
                 </asp:GridView>
-                <asp:ObjectDataSource ID="ObjectDataSource1" runat="server" SelectMethod="Productos" TypeName="DAOUsuario"></asp:ObjectDataSource>
+                <asp:ObjectDataSource ID="ObjectDataSource1" runat="server" SelectMethod="Productos" TypeName="Datos.DAOUsuario"></asp:ObjectDataSource>
             </td>
             <td class="auto-style24">&nbsp;</td>
             <td class="auto-style18">
@@ -339,7 +339,7 @@
             <td class="auto-style28">
                 <asp:DropDownList ID="DL_Sedes" runat="server" DataSourceID="ObjectDataSource3" DataTextField="NombreSede" DataValueField="NombreSede" OnSelectedIndexChanged="DropDownList1_SelectedIndexChanged">
                 </asp:DropDownList>
-                <asp:ObjectDataSource ID="ObjectDataSource3" runat="server" SelectMethod="Sedes" TypeName="DAOUsuario"></asp:ObjectDataSource>
+                <asp:ObjectDataSource ID="ObjectDataSource3" runat="server" SelectMethod="Sedes" TypeName="Datos.DAOUsuario"></asp:ObjectDataSource>
                 </td>
             <td class="auto-style14"></td>
             <td class="auto-style11"></td>

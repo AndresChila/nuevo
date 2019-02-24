@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -79,7 +79,7 @@ namespace Logica
                                         pedido.Idpedido = Convert.ToInt32(ff["f_verultimoid2"]);
                                     }
                                     d.crearAsignaciones(asignacion, pedido.Idpedido);
-                                    d.editarCantidad(producto.Idproducto, (asignacion.Cantidad + producto.Entregado));                                                                                                         
+                                    d.editarCantidad(producto.Idproducto, (asignacion.Cantidad + producto.Entregado));
                                     mensaje = "Asignación completada";
                                 }
                             }
@@ -97,8 +97,8 @@ namespace Logica
                     }
                     else
                     {
-                       mensaje = "No hay productos con esta descripción en la bodega validar.";
-                       return;
+                        mensaje = "No hay productos con esta descripción en la bodega validar.";
+                        return;
                     }
                 }
             }
@@ -116,7 +116,7 @@ namespace Logica
             DataTable detalle = new DataTable();
             if (name.Equals("Select"))
             {
-                DAOUsuario dAO = new DAOUsuario();                
+                DAOUsuario dAO = new DAOUsuario();
                 DataTable ped = new DataTable();
                 ped = dAO.verPedido(Convert.ToInt32(argument));
 
@@ -130,101 +130,145 @@ namespace Logica
             }
 
         }
-
-        public void Asignar(string refp, double talla, int cantidad, int idPed, int count)
+        List<Asignacion> aux = new List<Asignacion>();
+        int entregado, idProducto;
+        bool estado;
+        public void Asignar(string refp, double talla, int cantidad, int count, List<Asignacion> lista, string sede)
         {
-            /*DAOUsuario d = new DAOUsuario();
+            DAOUsuario d = new DAOUsuario();
             Producto producto = new Producto();
             Pedido pedido = new Pedido();
-            
             int cantBodega = 0;
-            int idPedi = idPed;
+
             int cont = 0;
             if (count > 0)
             {
-                foreach (GridViewRow row in GV_Pedidos.Rows)
+                Asignacion asignacion = new Asignacion();
+                cont++;
+                asignacion.Referencia = refp;
+                asignacion.Talla = talla;
+                asignacion.Cantidad = cantidad;
+                DataTable r = d.validarAsignacion(asignacion.Referencia, asignacion.Talla);
+                if (r.Rows.Count == 1)
                 {
-                    Asignacion asignacion = new Asignacion();
-                    cont++;
-                    asignacion.Referencia = refp;
-                    asignacion.Talla = talla;
-                    asignacion.Cantidad = cantidad;
-
-                    DataTable r = d.validarAsignacion(asignacion.Referencia, asignacion.Talla);
-
-                    if (r.Rows.Count == 1)
+                    foreach (DataRow ro in r.Rows)
                     {
-                        foreach (DataRow ro in r.Rows)
+                        cantBodega = Convert.ToInt32(ro["cantidad"]);
+                        producto.Entregado = Convert.ToInt32(ro["entregado"]);
+                        entregado = producto.Entregado;
+                        producto.Idproducto = Convert.ToInt32(ro["idproducto"]);
+                        idProducto = producto.Idproducto;
+                        cantBodega = cantBodega - producto.Entregado;
+                    }
+                    if (asignacion.Cantidad < cantBodega)
+                    {
+                        //Response.Write("esto da" + (cantBodega - asignacion.Cantidad));
+                        if ((cantBodega - asignacion.Cantidad) >= 5)
                         {
-                            cantBodega = Convert.ToInt32(ro["cantidad"]);
-                            producto.Entregado = Convert.ToInt32(ro["entregado"]);
-                            Session["entregado"] = producto.Entregado;
-                            producto.Idproducto = Convert.ToInt32(ro["idproducto"]);
-                            Session["idproducto"] = producto.Idproducto;
-                            cantBodega = cantBodega - producto.Entregado;
-                        }
-                        if (asignacion.Cantidad < cantBodega)
-                        {
-                            Response.Write("esto da" + (cantBodega - asignacion.Cantidad));
-                            if ((cantBodega - asignacion.Cantidad) >= 5)
-                            {
-                                DateTime fechaHoy = DateTime.Now;
-                                asignacion.Fecha = fechaHoy.ToString("d");
-                                asignacion.Estado = false;
-                                asignacion.Sede = Convert.ToString(Session["sedePedido"]);
+                            DateTime fechaHoy = DateTime.Now;
+                            asignacion.Fecha = fechaHoy.ToString("d");
+                            asignacion.Estado = false;
+                            asignacion.Sede = Convert.ToString(sede);
 
-                                if (Session["asignacion2"] == null)
-                                {
-                                    listaAsignacion2 = new List<Asignacion>();
-                                    listaAsignacion2.Add(asignacion);
-                                    Session["asignacion2"] = listaAsignacion2;
-                                }
-                                else
-                                {
-                                    listaAsignacion2 = (Session["asignacion2"] as List<Asignacion>);
-                                    listaAsignacion2.Add(asignacion);
-                                    Session["asignacion2"] = listaAsignacion2;
-                                }
+                            if (lista == null)
+                            {
+                                lista = new List<Asignacion>();
+                                lista.Add(asignacion);
+                                aux = lista;
                             }
                             else
                             {
-#pragma warning disable CS0618 // Type or member is obsolete
-
-                                RegisterStartupScript("mensaje", "<script type='text/javascript'>alert('En la sede principal deben quedar al menos 5 productos. Revise el producto Referencia:" + asignacion.Referencia + " y talla " + asignacion.Talla + "');</script>");
-#pragma warning restore CS0618 // Type or member is obsolete
-                                return;
+                                lista.Add(asignacion);
+                                aux = lista;
                             }
                         }
                         else
                         {
-#pragma warning disable CS0618 // Type or member is obsolete
-                            RegisterStartupScript("mensaje", "<script type='text/javascript'>alert('La cantidad de productos a asignar debe ser menor a la que esta en bodega. ');</script>");
-#pragma warning restore CS0618 // Type or member is obsolete
+                            mensaje = "En la sede principal deben quedar al menos 5 productos. Revise el producto Referencia:" + asignacion.Referencia + " y talla " + asignacion.Talla + ".";
                             return;
                         }
                     }
-
                     else
                     {
-#pragma warning disable CS0618 // Type or member is obsolete
-                        RegisterStartupScript("mensaje", "<script type='text/javascript'>alert('No hay productos con esta descripción en la bodega validar. ');</script>");
-#pragma warning restore CS0618 // Type or member is obsolete
+                        mensaje = "La cantidad de productos a asignar debe ser menor a la que esta en bodega.";
                         return;
                     }
                 }
-#pragma warning disable CS0618 // Type or member is obsolete
-                RegisterStartupScript("mensaje", "<script type='text/javascript'>alert('El pedido esta listo para ser enviado.');</script>");
-#pragma warning restore CS0618 // Type or member is obsolete
+                else
+                {
+                    mensaje = "No hay productos con esta descripción en la bodega validar";
+                    return;
+                }
             }
-            if (Session["asignacion2"].Equals(null) == false)
+            else
             {
-                Button2.Enabled = true;
-                Button3.Enabled = false;
+                mensaje = "El pedido esta listo para ser enviado.";
+                return;
             }
+            if (lista.Equals(null) == false)
+            {
+                estado = true;
+            }
+        }
+        int idpedido;
+        public void ingresarBD(List<Asignacion> lista, int idpro, int entr)
+        {
+            DAOUsuario d = new DAOUsuario();
+            List<Asignacion> listaAsignacion2 = new List<Asignacion>();
+            listaAsignacion2 = lista;
+            idProducto = idpro;
+            entregado = entr;
+            int cont = 0;
+            if (listaAsignacion2.Count > 0)
+            {
+                foreach (Asignacion a in listaAsignacion2)
+                {
+                    cont++;
+                    if (cont == 1)
+                    {
+                        d.crearAsignacion(a);
+                    }
+                    DataTable id = new DataTable();
+                    id = d.verUltimoId2();
+                    if (id.Rows.Count > 0)
+                    {
+                        foreach (DataRow ff in id.Rows)
+                        {
+                            idpedido = Convert.ToInt32(ff["f_verultimoid2"]);
+                        }
+                        d.crearAsignaciones(a, Convert.ToInt32(idpedido));
+                        d.editarCantidad(Convert.ToInt32(idProducto), (a.Cantidad + Convert.ToInt32(entregado)));
+                        d.actualizarPedido(true, Convert.ToInt32(idpedido));
+                        mensaje = "Base de Datos actualizada. Asignación completada.";
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                mensaje = "No hay una lista llena para enviar. ";
+                return;
+            }
+        }
 
-            GV_Pedido.DataBind();
-            GV_Pedidos.DataBind();
-            GV_ProductosBodega.DataBind();*/
+        public bool GeT_Estado()
+        {
+            return estado;
+        }
+
+        public List<Asignacion> GetPedidos()
+        {
+            return aux;
+        }
+
+        public int GetEntregado()
+        {
+            return entregado;
+        }
+
+        public int GetId()
+        {
+            return idProducto;
         }
 
         public string Sede()

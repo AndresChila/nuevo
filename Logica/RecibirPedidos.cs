@@ -20,6 +20,7 @@ namespace Logica
             this.paginar2 = paginar2;
             this.idAsignDT = idAsignDT;
             this.idAsig = idAsig;
+            actualizarAsignaciones();
         }
 
         public string actualizarAsignaciones()
@@ -30,6 +31,7 @@ namespace Logica
             if (datosAsignacion.Rows.Count == 0)
             {
                 mensaje = "No hay productos pendientes para asignar al inventario.";
+                //return mensaje;
             }
             else
             {

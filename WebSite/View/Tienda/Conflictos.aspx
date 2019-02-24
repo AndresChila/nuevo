@@ -132,7 +132,7 @@
         <tr>
             <td>&nbsp;</td>
             <td class="auto-style15">
-                <asp:ObjectDataSource ID="ObjectDataSource5" runat="server" SelectMethod="verConflictos" TypeName="DAOUsuario"></asp:ObjectDataSource>
+                <asp:ObjectDataSource ID="ObjectDataSource5" runat="server" SelectMethod="verConflictos" TypeName="Datos.DAOUsuario"></asp:ObjectDataSource>
             </td>
             <td>&nbsp;</td>
             <td class="auto-style16">&nbsp;</td>

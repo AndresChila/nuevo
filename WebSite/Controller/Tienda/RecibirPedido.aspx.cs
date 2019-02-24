@@ -57,14 +57,15 @@ public partial class View_Tienda_RecibirPedido : System.Web.UI.Page
         RecibirPedidos rp = new RecibirPedidos(datosAsignacion, paginar, paginar2, idAsignDT, idAsig);
 
         string a = rp.traerMensaje();
-#pragma warning disable CS0618 // Type or member is obsolete
-        RegisterStartupScript("mensaje", "<script type='text/javascript'>alert('" + a + "');</script>");
-#pragma warning restore CS0618 // Type or member is obsolete
+
 
         GV_Asignacion.DataSource = datosAsignacion;
         GV_Asignacion.DataBind();
+#pragma warning disable CS0618 // Type or member is obsolete
+        RegisterStartupScript("mensaje", "<script type='text/javascript'>alert('" + a + "');</script>");
+#pragma warning restore CS0618 // Type or member is obsolete
     }
-        
+
     protected void GV_Asignacion_RowCommand(object sender, GridViewCommandEventArgs e)
     {
         RecibirPedidos selec = new RecibirPedidos(null,null,null,null, idAsig: null);
