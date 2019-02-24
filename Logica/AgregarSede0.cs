@@ -95,6 +95,7 @@ namespace Logica
         {
             return mensaje;
         }
+
         public void eliminarSede(string comandName, int comandArgument)
         {
             if (comandName==("Delete"))

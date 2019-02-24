@@ -41,8 +41,6 @@ public partial class View_Tienda_AgregarSede : System.Web.UI.Page
 
     protected void GridView1_SelectedIndexChanged(object sender, EventArgs e)
     {
-        /*GridView1.PageIndex = e.NewPageIndex;
-        this.llenarGV_Sedes();*/
     }
 
 
@@ -60,11 +58,7 @@ public partial class View_Tienda_AgregarSede : System.Web.UI.Page
         elimi.eliminarSede(e.CommandName, int.Parse(e.CommandArgument.ToString()));
         llenarGV_Sedes();
     }
-
-
-
-
-
+    
     protected void GridView1_RowDeleting(object sender, GridViewDeleteEventArgs e)
     {
 

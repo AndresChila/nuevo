@@ -8,15 +8,24 @@ using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Datos;
+using Logica;
 
 public partial class View_Tienda_RecibirPedido : System.Web.UI.Page
 {
+    DataTable paginar, paginar2, idAsignDT, listaDev;
+    DAOUsuario dao = new DAOUsuario();
+    Pedido pedidos = new Pedido();
+    DataTable asig = new DataTable();
+    DataTable asigs = new DataTable();
+
     protected void Page_Load(object sender, EventArgs e)
     {
         if (!IsPostBack)
         {
-            Session["paginar"] = null;
-            Session["paginar2"] = null;
+            paginar = Session["paginar"] as DataTable;
+            paginar = null;
+            paginar2 = Session["paginar2"] as DataTable;
+            paginar2 = null;
             this.actualizarAsignaciones();
         }
     }
@@ -42,57 +51,30 @@ public partial class View_Tienda_RecibirPedido : System.Web.UI.Page
     {
         DAOUsuario dAO = new DAOUsuario();
         DataTable datosAsignacion = new DataTable();
-        Session["paginar"] = null;
+        paginar = null;
         datosAsignacion = dAO.verAsignacion(Convert.ToString(Session["sede"]));
-        if (datosAsignacion.Rows.Count == 0)
-        {
+
+        RecibirPedidos rp = new RecibirPedidos(datosAsignacion, paginar, paginar2, idAsignDT, idAsig);
+
+        string a = rp.traerMensaje();
 #pragma warning disable CS0618 // Type or member is obsolete
-            RegisterStartupScript("mensaje", "<script type='text/javascript'>alert('No hay productos pendientes para asignar al inventario.');</script>");
+        RegisterStartupScript("mensaje", "<script type='text/javascript'>alert('" + a + "');</script>");
 #pragma warning restore CS0618 // Type or member is obsolete
-        }
-        else
-        {
 
-
-            GV_Asignacion.DataSource = datosAsignacion;
-            GV_Asignacion.DataBind();
-            if (Session["paginar"] == null)
-            {
-                compara = new DataTable();
-                compara = datosAsignacion;
-                Session["paginar"] = compara;
-            }
-        }
+        GV_Asignacion.DataSource = datosAsignacion;
+        GV_Asignacion.DataBind();
     }
-
-
-
+        
     protected void GV_Asignacion_RowCommand(object sender, GridViewCommandEventArgs e)
     {
-        if (e.CommandName.Equals("Select"))
-        {
-            DAOUsuario dAO = new DAOUsuario();
-            Session["paginar2"] = null;
-            Session["idAsig"] = null;
-            DataTable datosAsignaciones = dAO.verAsignaciones(Convert.ToInt32(e.CommandArgument));
+        RecibirPedidos selec = new RecibirPedidos(null,null,null,null, idAsig: null);
+        selec.seleccionarSede(e.CommandName, int.Parse(e.CommandArgument.ToString()));
+            DataTable datosAsignaciones = dao.verAsignaciones(Convert.ToInt32(e.CommandArgument));
             GV_Asignaciones.DataSource = datosAsignaciones;
             GV_Asignaciones.DataBind();
-            if (Session["paginar2"] == null)
-            {
-                compara2 = new DataTable();
-                compara2 = datosAsignaciones;
-                Session["paginar2"] = compara2;
-            }
-            if (Session["idAsig"] == null)
-            {
-                idAsig = Convert.ToString(e.CommandArgument);
-                Session["idAsig"] = idAsig;
-            }
-
-
-
-        }
     }
+
+
 
     protected void GV_Asignacion_PageIndexChanging(object sender, GridViewPageEventArgs e)
     {
@@ -108,15 +90,17 @@ public partial class View_Tienda_RecibirPedido : System.Web.UI.Page
         GV_Asignaciones.DataBind();
     }
 
-
+    //FALTA MIGRAR FUNCIONES HACIA ABAJO
     protected void B_AgregarInventario_Click(object sender, EventArgs e)
     {
-        //this.mensaje();
-        Session["listaDev"] = null;
+        listaDev = Session["listaDev"] as DataTable;
+        listaDev= null;
         DAOUsuario da = new DAOUsuario();
         int idAsignacion = Convert.ToInt32(Session["idAsig"]);
 
         da.actualizarAsignacion(true, idAsignacion);
+        int FilasGV = GV_Asignaciones.Rows.Count;
+        
         if (GV_Asignaciones.Rows.Count == 0)
         {
 #pragma warning disable CS0618 // Type or member is obsolete
@@ -137,13 +121,13 @@ public partial class View_Tienda_RecibirPedido : System.Web.UI.Page
                 if (inventario.Referencia != null)
                 {
                     inventario.Sede = Convert.ToString(Session["sede"]);
-                    if(dev == true)
+                    if (dev == true)
                     {
                         da.crearInventario(inventario);
                     }
-                    else if(dev == false)
+                    else if (dev == false)
                     {
-                        if(Session["listaDev"] == null)
+                        if (Session["listaDev"] == null)
                         {
                             listaDevolucion = new List<Inventario>();
                             listaDevolucion.Add(inventario);
@@ -154,8 +138,8 @@ public partial class View_Tienda_RecibirPedido : System.Web.UI.Page
                             listaDevolucion = (Session["listaDev"] as List<Inventario>);
                             listaDevolucion.Add(inventario);
                             Session["listaDev"] = listaDevolucion;
-                        }                        
-                    }                    
+                        }
+                    }
 #pragma warning disable CS0618 // Type or member is obsolete
                     RegisterStartupScript("mensaje", "<script type='text/javascript'>alert('Se han añadido los productos al inventario.');</script>");
 #pragma warning restore CS0618 // Type or member is obsolete
@@ -178,10 +162,11 @@ public partial class View_Tienda_RecibirPedido : System.Web.UI.Page
     {
 
     }
-     void llenarGV_Devoluciones()
+
+    void llenarGV_Devoluciones()
     {
         List<Inventario> inventarios;
-        if(Session["listaDev"] == null)
+        if (Session["listaDev"] == null)
         {
 #pragma warning disable CS0618 // Type or member is obsolete
             RegisterStartupScript("mensaje", "<script type='text/javascript'>alert('No hay productos con conflictos para enviar.');</script>");
@@ -192,9 +177,9 @@ public partial class View_Tienda_RecibirPedido : System.Web.UI.Page
             inventarios = (Session["listaDev"] as List<Inventario>);
             GV_Devolver.DataSource = inventarios;
             GV_Devolver.DataBind();
-        }        
+        }
     }
-    
+
 
     void imprimir2()
     {
@@ -204,7 +189,7 @@ public partial class View_Tienda_RecibirPedido : System.Web.UI.Page
     [WebMethod]
     public string OkClick(object sender, EventArgs e)
     {
-        
+
         return "Ok";
     }
 
@@ -231,10 +216,10 @@ public partial class View_Tienda_RecibirPedido : System.Web.UI.Page
             {
                 devolver.Idpedido = Convert.ToInt32(rowe["f_verultimoid"]);
             }
-            
+
             foreach (GridViewRow row in GV_Devolver.Rows)
             {
-                Asignacion temp =  new Asignacion();
+                Asignacion temp = new Asignacion();
                 temp.Referencia = Convert.ToString(((Label)row.Cells[0].FindControl("L_Referencia")).Text);
                 temp.Talla = Convert.ToDouble(((Label)row.Cells[1].FindControl("L_Talla")).Text);
                 temp.Cantidad = Convert.ToInt32(((Label)row.Cells[1].FindControl("L_Cantidad")).Text);
@@ -244,8 +229,7 @@ public partial class View_Tienda_RecibirPedido : System.Web.UI.Page
         TB_Observación.Text = "";
         GV_Devolver.DataSource = null;
         GV_Devolver.DataBind();
-        
-    }
-}
 
-    
+    }
+
+}
