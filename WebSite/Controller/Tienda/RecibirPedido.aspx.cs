@@ -49,38 +49,48 @@ public partial class View_Tienda_RecibirPedido : System.Web.UI.Page
 
     protected void actualizarAsignaciones()
     {
-        DAOUsuario dAO = new DAOUsuario();
-        DataTable datosAsignacion = new DataTable();
-        paginar = null;
-        datosAsignacion = dAO.verAsignacion(Convert.ToString(Session["sede"]));
-
-        RecibirPedidos rp = new RecibirPedidos(datosAsignacion, paginar, paginar2, idAsignDT, idAsig);
-
-        string a = rp.traerMensaje();
-
-
-        GV_Asignacion.DataSource = datosAsignacion;
+        RecibirPedidos actu = new RecibirPedidos();       
+        
+        GV_Asignacion.DataSource = actu.actualizarAsignaciones(Convert.ToString(Session["sede"])); 
         GV_Asignacion.DataBind();
 #pragma warning disable CS0618 // Type or member is obsolete
-        RegisterStartupScript("mensaje", "<script type='text/javascript'>alert('" + a + "');</script>");
+        RegisterStartupScript("mensaje", "<script type='text/javascript'>alert('" + actu.traerMensaje() + "');</script>");
 #pragma warning restore CS0618 // Type or member is obsolete
+
     }
 
     protected void GV_Asignacion_RowCommand(object sender, GridViewCommandEventArgs e)
     {
-        RecibirPedidos selec = new RecibirPedidos(null,null,null,null, idAsig: null);
-        selec.seleccionarSede(e.CommandName, int.Parse(e.CommandArgument.ToString()));
-            DataTable datosAsignaciones = dao.verAsignaciones(Convert.ToInt32(e.CommandArgument));
+        if (e.CommandName.Equals("Select"))
+        {
+            DAOUsuario dAO = new DAOUsuario();
+            Session["paginar2"] = null;
+            Session["idAsig"] = null;
+            DataTable datosAsignaciones = dAO.verAsignaciones(Convert.ToInt32(e.CommandArgument));
             GV_Asignaciones.DataSource = datosAsignaciones;
             GV_Asignaciones.DataBind();
+            if (Session["paginar2"] == null)
+            {
+                compara2 = new DataTable();
+                compara2 = datosAsignaciones;
+                Session["paginar2"] = compara2;
+            }
+            if (Session["idAsig"] == null)
+            {
+                idAsig = Convert.ToString(e.CommandArgument);
+                Session["idAsig"] = idAsig;
+            }
+
+
+
+        }
     }
-
-
 
     protected void GV_Asignacion_PageIndexChanging(object sender, GridViewPageEventArgs e)
     {
+        RecibirPedidos gv = new RecibirPedidos();
         GV_Asignacion.PageIndex = e.NewPageIndex;
-        GV_Asignacion.DataSource = (DataTable)Session["paginar"];
+        GV_Asignacion.DataSource = gv.actualizarAsignaciones(Convert.ToString(Session["sede"]));
         GV_Asignacion.DataBind();
     }
 
@@ -91,17 +101,15 @@ public partial class View_Tienda_RecibirPedido : System.Web.UI.Page
         GV_Asignaciones.DataBind();
     }
 
-    //FALTA MIGRAR FUNCIONES HACIA ABAJO
+
     protected void B_AgregarInventario_Click(object sender, EventArgs e)
     {
-        listaDev = Session["listaDev"] as DataTable;
-        listaDev= null;
+        //this.mensaje();
+        Session["listaDev"] = null;
         DAOUsuario da = new DAOUsuario();
         int idAsignacion = Convert.ToInt32(Session["idAsig"]);
 
         da.actualizarAsignacion(true, idAsignacion);
-        int FilasGV = GV_Asignaciones.Rows.Count;
-        
         if (GV_Asignaciones.Rows.Count == 0)
         {
 #pragma warning disable CS0618 // Type or member is obsolete
@@ -163,7 +171,6 @@ public partial class View_Tienda_RecibirPedido : System.Web.UI.Page
     {
 
     }
-
     void llenarGV_Devoluciones()
     {
         List<Inventario> inventarios;
@@ -232,5 +239,4 @@ public partial class View_Tienda_RecibirPedido : System.Web.UI.Page
         GV_Devolver.DataBind();
 
     }
-
 }

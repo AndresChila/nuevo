@@ -13,36 +13,36 @@ namespace Logica
         string mensaje, idAsig;
         DataTable datosAsignacion, compara, compara2, paginar, paginar2, idAsignDT;
 
+        public RecibirPedidos()
+        {
+
+        }
+
         public RecibirPedidos(DataTable datosAsignacion, DataTable paginar, DataTable paginar2, DataTable idAsignDT, string idAsig)
         {
             this.datosAsignacion = datosAsignacion;
             this.paginar = paginar;
             this.paginar2 = paginar2;
             this.idAsignDT = idAsignDT;
-            this.idAsig = idAsig;
-            actualizarAsignaciones();
+            this.idAsig = idAsig;            
         }
 
-        public string actualizarAsignaciones()
+        public DataTable actualizarAsignaciones(string sede)
         {
             DAOUsuario dAO = new DAOUsuario();
             DataTable datosAsignacion = new DataTable();
-            paginar = null;
+            datosAsignacion = dAO.verAsignacion(sede); ;
+
             if (datosAsignacion.Rows.Count == 0)
             {
                 mensaje = "No hay productos pendientes para asignar al inventario.";
-                //return mensaje;
+                return null;
             }
             else
             {
-                if (paginar == null)
-                {
-                    compara = new DataTable();
-                    compara = datosAsignacion;
-                    paginar = compara;
-                }
-            }
-            return mensaje;
+                mensaje = "Puede recibir su(s)" + datosAsignacion.Rows.Count+" pedido(s).";
+                return datosAsignacion;
+            }           
         }
 
         public string traerMensaje()

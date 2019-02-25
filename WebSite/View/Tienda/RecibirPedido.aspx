@@ -85,7 +85,11 @@
                     <SortedDescendingCellStyle BackColor="#D6DFDF" />
                     <SortedDescendingHeaderStyle BackColor="#002876" />
                 </asp:GridView>
-                <asp:ObjectDataSource ID="ObjectDataSource1" runat="server" SelectMethod="verAsignacion" TypeName="DAOUsuario"></asp:ObjectDataSource>
+                <asp:ObjectDataSource ID="ObjectDataSource1" runat="server" SelectMethod="verAsignacion" TypeName="Datos.DAOUsuario">
+                    <SelectParameters>
+                        <asp:Parameter DefaultValue="&quot;MADRID&quot;" Name="a" Type="String" />
+                    </SelectParameters>
+                </asp:ObjectDataSource>
             </td>
             <td class="auto-style22">
                 &nbsp;</td>
