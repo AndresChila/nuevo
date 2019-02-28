@@ -22,11 +22,6 @@ public partial class View_Tienda_CRUDCliente : System.Web.UI.Page
         cli = dao.traerClientes();
         GV_Clientes.DataSource = cli;
         GV_Clientes.DataBind();
-
-        if (!IsPostBack)
-        {
-            
-        }
     }
 
     protected void B_Agregar_Click(object sender, EventArgs e)
@@ -40,7 +35,7 @@ public partial class View_Tienda_CRUDCliente : System.Web.UI.Page
                                                                  accion, resultadoNombre, resultadoApellido);
 
 #pragma warning disable CS0618 // Type or member is obsolete
-        RegisterStartupScript("mensaje", "<script type='text/javascript'>alert('Revise los datos." + val.devuelvemensaje() + " ');</script>");
+        RegisterStartupScript("mensaje", "<script type='text/javascript'>alert('" + val.devuelvemensaje() + " ');</script>");
 #pragma warning restore CS0618 // Type or member is obsolete
         cli = dao.traerClientes();
         GV_Clientes.DataSource = cli;

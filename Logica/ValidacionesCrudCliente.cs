@@ -15,13 +15,14 @@ namespace Logica
         {
 
         }
+
         DAOUsuario dao = new DAOUsuario();
         Cliente cliente = new Cliente();
         DataTable cli = new DataTable();
 
         string nombre, cedula, apellido, direccion, telefono, sexo;
         string nombree, cedulae, apellidoe, direccione, telefonoe, sexoe;
-        string mensaje = "todo ok";
+        string mensaje;
         string accion;
         bool resultadoNombre, resultadoApellido;
         public ValidacionesCrudCliente(string nombrea, string cedulaa, string apellidoa, string direcciona, string telefonoa, string sexoa,
@@ -97,7 +98,7 @@ namespace Logica
         {
             if (validarLlenoAgregar(cedula, nombre, apellido, direccion, telefono) == true)
             {
-                if (validarExitente(cedula))
+                if (validarExistente(cedula))
                 {
                     if (validarNumeros(cedula) == true)
                     {
@@ -131,38 +132,33 @@ namespace Logica
                                 else
                                 {
                                     mensaje = "Ingrese el telefono del Cliente correctamente";
-                                    return;
                                 }
                             }
                             else
                             {
                                 mensaje = "Ingrese el apellido del Cliente correctamente.";
-                                return;
                             }
                         }
                         else
                         {
                             mensaje = "Ingrese el nombre del Cliente correctamente.";
-                            return;
                         }
                     }
                     else
                     {
                         mensaje = "Ingrese la cedula del Cliente correctamente.";
-                        return;
                     }
                 }
                 else
                 {
                     mensaje = "Cliente Ya Existeee!.";
-                    return;
                 }
             }
             else
             {
                 mensaje = "Ingrese todos los datos.";
-                return;
             }
+            this.devuelvemensaje();
         }
 
         public string devuelvemensaje()
@@ -194,7 +190,7 @@ namespace Logica
                                 if (cliente2.Cedula <= 0 || cliente2.Telefono <= 0)
                                 {
                                     mensaje = "Ingrese los datos correctamente.";
-                                    return;
+                                    this.devuelvemensaje();
                                 }
                                 dao.actualizarCliente(cliente2);
 
@@ -207,32 +203,33 @@ namespace Logica
                             else
                             {
                                 mensaje = "Ingrese el telefono del Cliente correctamente.";
-                                return;
+                                this.devuelvemensaje();
                             }
                         }
                         else
                         {
                             mensaje = "Ingrese el apellido del Cliente correctamente.";
-                            return;
+                            this.devuelvemensaje();
                         }
                     }
                     else
                     {
                         mensaje = "Ingrese el nombre del Cliente correctamente.";
-                        return;
+                        this.devuelvemensaje();
                     }
                 }
                 else
                 {
                     mensaje = "Ingrese la cedula del Cliente correctamente.";
-                    return;
+                    this.devuelvemensaje();
                 }
             }
             else
             {
                 mensaje = "Ingrese todos los datos.";
-                return;
-            }           
+                this.devuelvemensaje();
+            }
+            
         }
 
         Cliente clientico = new Cliente();
@@ -264,7 +261,7 @@ namespace Logica
                     clientico.Nombre = Convert.ToString(row["nombre"]);
                     clientico.Apellido = Convert.ToString(row["apellido"]);
                     clientico.Direccion = Convert.ToString(row["direccion"]);
-                    clientico.Telefono = Convert.ToInt32(row["telefono"]);                    
+                    clientico.Telefono = Convert.ToInt64(row["telefono"]);                    
                 }
             }
             else
@@ -281,7 +278,8 @@ namespace Logica
         {
             return clientico;
         }
-        public bool validarExitente(string cedula)
+
+        public bool validarExistente(string cedula)
         {
             DataTable cl = new DataTable();
             cl = dao.traerClientes();

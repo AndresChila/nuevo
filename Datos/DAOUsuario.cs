@@ -171,8 +171,13 @@ namespace Datos
             }
             catch (Exception Ex)
             {
-                if(Ex.Message != "Tipo de almacenamiento no válido: DBNull.")
-                throw Ex;
+                if (Ex.Message != "Tipo de almacenamiento no válido: DBNull.")
+                {
+                    if (Ex.Message != "Invalid storage type: DBNull.")
+                    {
+                        throw Ex;
+                    }
+                }
             }
             finally
             {
@@ -193,7 +198,7 @@ namespace Datos
             {
                 NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter("tienda.eliminar_cliente", conection);
                 dataAdapter.SelectCommand.CommandType = CommandType.StoredProcedure;
-                dataAdapter.SelectCommand.Parameters.Add("_cedula", NpgsqlDbType.Integer).Value = cedula;
+                dataAdapter.SelectCommand.Parameters.Add("_id", NpgsqlDbType.Integer).Value = cedula;
 
 
                 conection.Open();
