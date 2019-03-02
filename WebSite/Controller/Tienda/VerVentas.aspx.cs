@@ -6,83 +6,52 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Datos;
+using Logica;
 
 public partial class Controller_Tienda_VerVentas : System.Web.UI.Page
 {
+    DataTable sdata, suser_id;
+    int flag = 0;
+
     protected void Page_Load(object sender, EventArgs e)
     {
-
+        sdata = Session["data"] as DataTable;
+        suser_id = Session["user_id"] as DataTable;
     }
 
     protected void B_Ir_Click(object sender, EventArgs e)
     {
-        if(DL_Filtrar.SelectedValue == "1")
-        {
-            this.ponerIn();
-            DAOUsuario dAO = new DAOUsuario();
-            DataTable data = new DataTable();
-            data = dAO.verVentas(Convert.ToInt32(Session["user_id"]), 1, "", "");
-            Session["data"] = data;
-            this.llenarGV_Ventas();
-
-        }
-        if(DL_Filtrar.SelectedValue == "2")
-        {
-            
-            Label6.Visible = true;
-            Label7.Visible = true;
-            TB_Fecha1.Visible = true;
-            TB_Fecha2.Visible = true;
-            B_Buscar.Visible = true;
-
-            B_Ir.Enabled = false;
-
-        }
-        if(DL_Filtrar.SelectedValue == "3")
-        {
-            this.ponerIn();
-            DAOUsuario dAO = new DAOUsuario();
-            DataTable data = new DataTable();
-            data = dAO.verVentas(Convert.ToInt32(Session["user_id"]), 3, "", "");
-            Session["data"] = data;
-            this.llenarGV_Ventas();
-        }
+        MisVentas filtrar = new MisVentas(DL_Filtrar.SelectedValue, Convert.ToString(TB_Fecha1.Text), Convert.ToString(TB_Fecha2.Text), sdata, suser_id);
+        this.ponerIn(filtrar.Get_Estado());
+        this.llenarGV_Ventas();
+        B_Ir.Enabled = filtrar.Get_Estado2();
     }
 
-    void ponerIn()
+    public void ponerIn(bool est)
     {
-        Label6.Visible = false;
-        Label7.Visible = false;
-        TB_Fecha1.Visible = false;
-        TB_Fecha2.Visible = false;
-        B_Buscar.Visible = false;
+        Label6.Visible = est;
+        Label7.Visible = est;
+        TB_Fecha1.Visible = est;
+        TB_Fecha2.Visible = est;
+        B_Buscar.Visible = est;
     }
 
     void llenarGV_Ventas()
     {
-        DataTable data = (Session["data"] as DataTable);
+        MisVentas a = new MisVentas();
+        DataTable data = a.Get_GV_Ventas();
         GV_Ventas.DataSource = data;
         GV_Ventas.DataBind();
     }
 
     protected void B_Buscar_Click(object sender, EventArgs e)
     {
-        if (validarLlenadoFechas() == true)
-        {
-            DAOUsuario dAO = new DAOUsuario();
-            DataTable data = new DataTable();
-            data = dAO.verVentas(Convert.ToInt32(Session["user_id"]), 2, Convert.ToString(TB_Fecha1.Text), Convert.ToString(TB_Fecha2.Text));
-            Session["data"] = data;
-            this.llenarGV_Ventas();
-            B_Ir.Enabled = true;
-            this.ponerIn();
-        }
-        else
-        {
+        MisVentas venta = new MisVentas(DL_Filtrar.SelectedValue, Convert.ToString(TB_Fecha1.Text), Convert.ToString(TB_Fecha2.Text), sdata, suser_id);
+        string a = venta.traerMensaje();
+        B_Ir.Enabled = venta.Get_Estado2();
 #pragma warning disable CS0618 // Type or member is obsolete
-            RegisterStartupScript("mensaje", "<script type='text/javascript'>alert('Ingrese datos.');</script>");
+        RegisterStartupScript("mensaje", "<script type='text/javascript'>alert('" + a + "');</script>");
 #pragma warning restore CS0618 // Type or member is obsolete
-        }
     }
 
     protected void GV_Ventas_PageIndexChanging(object sender, GridViewPageEventArgs e)
@@ -91,15 +60,5 @@ public partial class Controller_Tienda_VerVentas : System.Web.UI.Page
         this.llenarGV_Ventas();
     }
 
-    bool validarLlenadoFechas()
-    {
-        if(TB_Fecha1.Text == "" || TB_Fecha2.Text == "")
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
+    
 }

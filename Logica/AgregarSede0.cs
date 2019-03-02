@@ -91,6 +91,7 @@ namespace Logica
                 return true;
             }
         }
+
         public string traerMensaje()
         {
             return mensaje;

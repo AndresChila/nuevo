@@ -94,7 +94,7 @@ namespace Logica
             }
         }
 
-        public void hacertodoagregar()
+        public string hacertodoagregar()
         {
             if (validarLlenoAgregar(cedula, nombre, apellido, direccion, telefono) == true)
             {
@@ -117,7 +117,6 @@ namespace Logica
                                     if (cliente.Cedula <= 0 || cliente.Telefono <= 0)
                                     {
                                         mensaje = "Ingrese los datos del teléfono correctamente.";
-                                        return;
                                     }
                                     dao.CrearCliente(cliente);
                                     mensaje = "Cliente registrado exitosamente.";
@@ -158,7 +157,7 @@ namespace Logica
             {
                 mensaje = "Ingrese todos los datos.";
             }
-            this.devuelvemensaje();
+            return mensaje;
         }
 
         public string devuelvemensaje()
@@ -166,7 +165,7 @@ namespace Logica
             return mensaje;
         }
 
-        public void hacertodoeditar()
+        public string hacertodoeditar()
         {
             if (validarLlenoEditar() == true)
             {
@@ -190,7 +189,6 @@ namespace Logica
                                 if (cliente2.Cedula <= 0 || cliente2.Telefono <= 0)
                                 {
                                     mensaje = "Ingrese los datos correctamente.";
-                                    this.devuelvemensaje();
                                 }
                                 dao.actualizarCliente(cliente2);
 
@@ -203,33 +201,28 @@ namespace Logica
                             else
                             {
                                 mensaje = "Ingrese el telefono del Cliente correctamente.";
-                                this.devuelvemensaje();
                             }
                         }
                         else
                         {
                             mensaje = "Ingrese el apellido del Cliente correctamente.";
-                            this.devuelvemensaje();
                         }
                     }
                     else
                     {
                         mensaje = "Ingrese el nombre del Cliente correctamente.";
-                        this.devuelvemensaje();
                     }
                 }
                 else
                 {
                     mensaje = "Ingrese la cedula del Cliente correctamente.";
-                    this.devuelvemensaje();
                 }
             }
             else
             {
                 mensaje = "Ingrese todos los datos.";
-                this.devuelvemensaje();
             }
-            
+            return mensaje;
         }
 
         Cliente clientico = new Cliente();
