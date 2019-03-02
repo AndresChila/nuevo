@@ -63,7 +63,7 @@
                 </asp:DropDownList>
             </td>
             <td class="auto-style10">
-                <asp:Button ID="B_Ir" runat="server" OnClick="B_Ir_Click" Text="IR" />
+                <asp:Button ID="B_Ir" runat="server" OnClick="B_Ir_Click" Text="IR" style="width: 26px" />
             </td>
         </tr>
         <tr>
@@ -89,7 +89,7 @@
         <tr>
             <td class="auto-style21">&nbsp;</td>
             <td colspan="2">
-                <asp:GridView ID="GV_Ventas" runat="server" AllowPaging="True" AutoGenerateColumns="False" BackColor="White" BorderColor="#3366CC" BorderStyle="None" BorderWidth="1px" CellPadding="4" OnPageIndexChanging="GV_Ventas_PageIndexChanging" PageSize="5" Width="287px">
+                <asp:GridView ID="GV_Ventas" runat="server" AllowPaging="True" AutoGenerateColumns="False" BackColor="White" BorderColor="#3366CC" BorderStyle="None" BorderWidth="1px" CellPadding="4" OnPageIndexChanging="GV_Ventas_PageIndexChanging" PageSize="5" Width="287px" EmptyDataText="No hay ventas para mostrar.">
                     <Columns>
                         <asp:TemplateField HeaderText="Cédula Cliente">
                             <EditItemTemplate>

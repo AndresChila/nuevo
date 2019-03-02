@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Datos;
+using Utilitarios.DataSet;
 
 public partial class View_Tienda_VistaFactura : System.Web.UI.Page
 {
@@ -33,9 +34,9 @@ public partial class View_Tienda_VistaFactura : System.Web.UI.Page
 
         try
         {
-            DS_Factura dS_Factura = ObtenerInforme();
-            CrystalReportSource1.ReportDocument.SetDataSource(dS_Factura);
-            CrystalReportViewer1.ReportSource = CrystalReportSource1;
+            DS_Factura DS_Factura_ = ObtenerInforme();
+            CRS_Factura.ReportDocument.SetDataSource(DS_Factura_);
+            CRV_Factura.ReportSource = CRS_Factura;
         }
         catch (Exception)
         {

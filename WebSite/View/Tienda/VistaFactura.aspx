@@ -5,10 +5,10 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" Runat="Server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
-    <CR:CrystalReportSource ID="CrystalReportSource1" runat="server">
-        <Report FileName="~View\Reportes\ReporteFactura.rpt">
+    <CR:CrystalReportSource ID="CRS_Factura" runat="server">
+        <Report FileName="~\View\Reportes\ReporteFactura.rpt">
         </Report>
     </CR:CrystalReportSource>
-    <CR:CrystalReportViewer ID="CrystalReportViewer1" runat="server" AutoDataBind="true" ReportSourceID="CrystalReportSource1" ToolPanelView="None" />
+    <CR:CrystalReportViewer ID="CRV_Factura" runat="server" AutoDataBind="true" HasRefreshButton="True" ReportSourceID="CRS_Factura" />
 </asp:Content>
 
