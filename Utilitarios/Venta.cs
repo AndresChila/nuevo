@@ -19,7 +19,7 @@ public class Venta
     private int idcliente;
     private int idvendedor;
     private List<Producto> producto;
-    private DateTime fecha;
+    private string fecha;
     private double precio;
     private string sede;
 
@@ -27,7 +27,7 @@ public class Venta
     public int Idcliente { get => idcliente; set => idcliente = value; }
     public int Idvendedor { get => idvendedor; set => idvendedor = value; }
     public List<Producto> Producto { get => producto; set => producto = value; }
-    public DateTime Fecha { get => fecha; set => fecha = value; }
+    public string Fecha { get => fecha; set => fecha = value; }
     public double Precio { get => precio; set => precio = value; }
     public string Sede { get => sede; set => sede = value; }
 }

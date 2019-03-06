@@ -38,7 +38,7 @@ namespace Logica
                     venta.Producto = JsonConvert.DeserializeObject<List<Producto>>(Convert.ToString(row["descripcion"]));
                     refresh = venta.Producto as List<Producto>;
                     venta.Idvendedor = Convert.ToInt32(row["idvendedor"]);
-                    venta.Fecha = Convert.ToDateTime(row["fecha"]);
+                    venta.Fecha = row["fecha"].ToString();
                     venta.Precio = Convert.ToDouble(row["precio"]);
                     venta.Sede = Convert.ToString(row["sede"]);
                     DAOUsuario dAO = new DAOUsuario();

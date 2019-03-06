@@ -101,48 +101,25 @@ public partial class View_Tienda_NuevaVenta : System.Web.UI.Page
     {
         //Session["l"] = null;
         AgregarProductos agregar = new AgregarProductos();
-        foreach (GridViewRow row in GV_VentaPedido.Rows)
-        {            
-            llenarVenta(agregar.AnalizarGridView(Convert.ToString(((TextBox)row.Cells[2].FindControl("TB_Cantidad")).Text), Convert.ToDouble(((Label)row.Cells[1].FindControl("L_Talla")).Text), Convert.ToString(((Label)row.Cells[0].FindControl("L_Referencia")).Text), Session["sede"].ToString(), (List<Producto>) Session["lis"]));
-            string msg = agregar.get_mensaje();
+
+        llenarVenta(agregar.AnalizarGridView(TB_Cantida.Text.ToString(), double.Parse(LTalla.Text.ToString()), LRef.Text.ToString(), Session["sede"].ToString(), (List<Producto>)Session["lis"]));
+        string msg = agregar.get_mensaje();
 #pragma warning disable CS0618 // Type or member is obsolete
-            RegisterStartupScript("mensaje", "<script type='text/javascript'>alert('" + msg + "');</script>");
+        RegisterStartupScript("mensaje", "<script type='text/javascript'>alert('" + msg + "');</script>");
 #pragma warning restore CS0618 // Type or member is obsolete
-        }
         actualizarGV_Venta();
     }
 
     void llenarVenta(List<Producto> listaVV)
     {
         Session["lis"] = listaVV;
-//#pragma warning disable CS0618 // Type or member is obsolete
-  //      RegisterStartupScript("mensaje", "<script type='text/javascript'>alert('Entra a llenar venta.');</script>");
-//#pragma warning restore CS0618 // Type or member is obsolete
-        //Session["l"   ] = null;
-        /*if (Session["l"] == null)
-        {
-#pragma warning disable CS0618 // Type or member is obsolete
-            RegisterStartupScript("mensaje", "<script type='text/javascript'>alert('No hay productos para añadir a la venta.');</script>");
-#pragma warning restore CS0618 // Type or member is obsolete
-        }
-        else
-        {*/
-            double precioTotal = 0;
-            List<Producto> listaV = new List<Producto>();
-            listaV = (Session["lis"] as List<Producto>);
-            foreach (Producto p in listaV)
-            {
-                precioTotal = precioTotal + p.ValorTotal;
-            }
-            Response.Write("<script>window.alert('El valor de esta venta es de:" + precioTotal+"';</script>"); 
-            Session["valorVenta"] = Convert.ToString(precioTotal);
-
-        //}
-
-
+        AgregarProductos tot = new AgregarProductos();
+        double precioTotal = 0;
+        List<Producto> listaV = new List<Producto>();
+        listaV = (Session["lis"] as List<Producto>);
+        precioTotal = tot.sumarTotal(listaV);
+        Session["valorVenta"] = Convert.ToString(precioTotal);
     }
-
-
 
     void actualizarGV_Venta()
     {
@@ -151,7 +128,16 @@ public partial class View_Tienda_NuevaVenta : System.Web.UI.Page
         GV_Venta.DataSource = listaV;
         GV_Venta.DataBind();
         AgregarProductos p = new AgregarProductos();
-        ((TextBox)GV_Venta.FooterRow.FindControl("TB_TotalVenta")).Text = p.valorVenta(Session["valorVenta"].ToString());          
+        try
+        {
+            ((TextBox)GV_Venta.FooterRow.FindControl("TB_TotalVenta")).Text = p.valorVenta(Session["valorVenta"].ToString());
+        }
+        catch(Exception e)
+        {
+#pragma warning disable CS0618 // Type or member is obsolete
+            RegisterStartupScript("mensaje", "<script type='text/javascript'>alert('No hay productos para añadir a la grid venta');</script>");
+#pragma warning restore CS0618 // Type or member is obsolete 
+        }
     }
 
     void irAFactura()
@@ -171,30 +157,24 @@ public partial class View_Tienda_NuevaVenta : System.Web.UI.Page
         Venta venta = new Venta();
         DateTime fechaHoy = DateTime.Now;
         venta.Idcliente = int.Parse(Session["idCliente"].ToString());
-                venta.Idvendedor = int.Parse(Session["user_id"].ToString());
-                venta.Producto = (Session["lis"] as List<Producto>);
-                venta.Fecha = fechaHoy;
-                venta.Precio = double.Parse(Session["valorVenta"].ToString());
-                venta.Sede = Session["sede"].ToString();
-                AgregarProductos fact = new AgregarProductos();
-                fact.actualizarVenta(venta);
-                actualizarInventario();
-                reiniciar();
-                this.irAFactura();                  
+        venta.Idvendedor = int.Parse(Session["user_id"].ToString());
+        venta.Producto = (Session["lis"] as List<Producto>);
+        venta.Fecha = fechaHoy.ToString("d");
+        venta.Precio = double.Parse(Session["valorVenta"].ToString());
+        venta.Sede = Session["sede"].ToString();
+        AgregarProductos fact = new AgregarProductos();
+        fact.actualizarVenta(venta);
+        actualizarInventario();
+        reiniciar();
+        this.irAFactura();
     }
-    
+
 
 
     void actualizarInventario()
     {
-        List<Producto> refresh = new List<Producto>();
         AgregarProductos actInvt = new AgregarProductos();
-        refresh = (Session["lis"] as List<Producto>);
-        foreach(Producto p in refresh)
-        {
-            actInvt.actualizarInvent(Session["sede"].ToString(), p);
-        }
-
+        actInvt.paraInvent(Session["lis"] as List<Producto>, Session["sede"].ToString());
     }
 
      protected void GV_Productos_PageIndexChanging(object sender, GridViewPageEventArgs e)
@@ -264,12 +244,36 @@ public partial class View_Tienda_NuevaVenta : System.Web.UI.Page
 
     protected void GV_VentaPedido_SelectedIndexChanged(object sender, EventArgs e)
     {
-
+        
     }
 
     protected void B_Cancelar_Click(object sender, EventArgs e)
     {
         this.reiniciar();
     }
-    /////////////////////////////////////////////////////////////////////////////////////////ARREGLAR FACTURAR Y ABONO ERROR DE BASE DE DATOS !!!!!!!
+
+    protected void GV_VentaPedido_RowCommand(object sender, GridViewCommandEventArgs e)
+    {
+        AgregarProductos ag = new AgregarProductos();
+        List<Producto> prod = new List<Producto>();
+        string[] argumentos = e.CommandArgument.ToString().Split(new char[] { ',' });
+        string referencia = argumentos[0];
+        string talla = argumentos[1];
+
+        producto.Referencia = referencia;
+        producto.Talla = double.Parse(talla);
+        pintarSeleccionado(producto);
+        
+    }
+
+    protected void TB_Cantidad_TextChanged(object sender, EventArgs e)
+    {
+        
+    }
+    public void pintarSeleccionado(Producto p)
+    {
+        LRef.Text = p.Referencia;
+        LTalla.Text = p.Talla.ToString();
+    }
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }

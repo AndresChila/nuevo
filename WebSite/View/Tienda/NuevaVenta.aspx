@@ -70,7 +70,7 @@
             height: 104px;
             text-align: center;
         }
-    </style>
+        </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
     <table class="auto-style16">
@@ -107,7 +107,7 @@
                 <asp:Label ID="Label4" runat="server" Text="Productos:"></asp:Label>
             </td>
             <td class="auto-style19">
-                <asp:GridView ID="GV_VentaPedido" runat="server" AllowPaging="True" AutoGenerateColumns="False" PageSize="1" BackColor="White" BorderColor="#3366CC" BorderStyle="None" BorderWidth="1px" CellPadding="4" OnPageIndexChanging="GV_Productos_PageIndexChanging" OnSelectedIndexChanged="GV_VentaPedido_SelectedIndexChanged">
+                <asp:GridView ID="GV_VentaPedido" runat="server" AllowPaging="True" AutoGenerateColumns="False" PageSize="5" BackColor="White" BorderColor="#3366CC" BorderStyle="None" BorderWidth="1px" CellPadding="4" OnPageIndexChanging="GV_Productos_PageIndexChanging" OnSelectedIndexChanged="GV_VentaPedido_SelectedIndexChanged" OnRowCommand="GV_VentaPedido_RowCommand">
                     <Columns>
                         <asp:TemplateField HeaderText="Referencia">
                             <EditItemTemplate>
@@ -138,8 +138,10 @@
                             <HeaderTemplate>
                                 <asp:Button ID="B_BuscarProducto" runat="server" OnClick="B_BuscarProducto_Click" Text="Buscar Producto" />
                             </HeaderTemplate>
+                        </asp:TemplateField>
+                        <asp:TemplateField HeaderText="Seleccionar" ShowHeader="False">
                             <ItemTemplate>
-                                <asp:TextBox ID="TB_Cantidad" runat="server" MaxLength="3">0</asp:TextBox>
+                                <asp:LinkButton ID="LinkButton1" runat="server" CausesValidation="False" CommandName="Select" Text="Seleccionar" CommandArgument = '<%# Eval("Referencia")+","+Eval("talla") %>'></asp:LinkButton>
                             </ItemTemplate>
                         </asp:TemplateField>
                     </Columns>
@@ -155,17 +157,31 @@
                 </asp:GridView>
             </td>
             <td class="auto-style23">
-                <asp:Button ID="B_Seleccionar" runat="server" OnClick="B_Seleccionar_Click" Text="Agregar a la venta" Enabled="False" />
-            </td>
+                &nbsp;</td>
             <td>&nbsp;</td>
         </tr>
         <tr>
             <td class="auto-style41"></td>
             <td class="auto-style40">
                 &nbsp;
-&nbsp;</td>
+&nbsp;<table class="auto-style16">
+                    <tr>
+                        <td>Referencia<br />
+                            <asp:Label ID="LRef" runat="server"></asp:Label>
+                        </td>
+                        <td>Talla<br />
+                            <asp:Label ID="LTalla" runat="server"></asp:Label>
+                        </td>
+                        <td>Cantidad<br />
+                            <asp:TextBox ID="TB_Cantida" runat="server"></asp:TextBox>
+                        </td>
+                    </tr>
+                </table>
+            </td>
             <td class="auto-style42">
-                &nbsp;</td>
+                <asp:Button ID="B_Seleccionar" runat="server" OnClick="B_Seleccionar_Click" Text="Agregar a la venta" Enabled="False" />
+                <br />
+            </td>
             <td class="auto-style43"></td>
         </tr>
         <tr>

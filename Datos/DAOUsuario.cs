@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -1859,14 +1859,14 @@ namespace Datos
 
             try
             {
-                NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter("tienda.f_crearventanuevo", conection);
+                NpgsqlDataAdapter dataAdapter = new NpgsqlDataAdapter("tienda.f_crearventa", conection);
                 dataAdapter.SelectCommand.CommandType = CommandType.StoredProcedure;
 
 
-                dataAdapter.SelectCommand.Parameters.Add("_idvendedor", NpgsqlDbType.Integer).Value = venta.Idvendedor;
-                dataAdapter.SelectCommand.Parameters.Add("_idcliente", NpgsqlDbType.Integer).Value = venta.Idcliente;
+                dataAdapter.SelectCommand.Parameters.Add("_idvendedor", NpgsqlDbType.Text).Value = Convert.ToString(venta.Idvendedor);
+                dataAdapter.SelectCommand.Parameters.Add("_idcliente", NpgsqlDbType.Text).Value = Convert.ToString(venta.Idcliente);
                 dataAdapter.SelectCommand.Parameters.Add("_descripcion", NpgsqlDbType.Json).Value = venta1;
-                dataAdapter.SelectCommand.Parameters.Add("_fecha", NpgsqlDbType.Date).Value = venta.Fecha;
+                dataAdapter.SelectCommand.Parameters.Add("_fecha", NpgsqlDbType.Text).Value = venta.Fecha;
                 dataAdapter.SelectCommand.Parameters.Add("_precio", NpgsqlDbType.Double).Value = venta.Precio;
                 dataAdapter.SelectCommand.Parameters.Add("_sede", NpgsqlDbType.Text).Value = venta.Sede;
                 conection.Open();

@@ -12,10 +12,12 @@ namespace Logica
 {
     public class AgregarProductos
     {
+        double precioTotal;
         public AgregarProductos()
         {
 
         }
+        
 
         public List<Producto> AnalizarGridView(string cantidad, double talla, string refPro, string sede, List<Producto> listaVenta)
         {
@@ -37,7 +39,7 @@ namespace Logica
                 producto.Referencia = Convert.ToString(refPro);
                 producto.Talla = Convert.ToDouble(talla);
 
-                if (producto.Cantidad != 0)
+                if (producto.Cantidad > 0)
                 {
                     bool vof;
                     cont++;
@@ -66,43 +68,38 @@ namespace Logica
                             {
                                 listaVenta.Add(producto);
                             }
-                        }                   
-                }
-                if (cont == 0)
-                {
-                    this.set_mensaje("No hay productos para añadir a la venta.");
+                        }
+                    }
+                    
                 }
                 else
                 {
-                    //this.set_mensaje("Se han añadido " + cont + " productos a la venta.");
+                    if (listaVenta == null)
+                    {
+                        listaVenta = new List<Producto>();
+                        this.set_mensaje("No hay productos para añadir a la venta.");
+                    }
+                    else
+                    {   
+                        return listaVenta;
+                    }
+
                 }
             }
-            else
-            {
-                    /*Producto producto1 = new Producto();
-                    producto1.Precio =0;
-                    producto1.Idproducto = 0;
-                    producto1.Entregado = 0;
-                    producto1.ValorTotal = 0;
-                    producto1.Cantidad = 0;
-                    listaVenta.Add(producto1);*/
-                    //producto.Talla = 0;
-                    producto.Referencia = "0";
-                    listaVenta = new List<Producto>();
-                    listaVenta.Add(producto);
-                    this.set_mensaje("Ingrese una cantidad.");
-                    
-            }
-        }
             else
             {
                 this.set_mensaje("Ingrese solo numeros.");
             }
+            if(cont == 0)
+            {
+                this.set_mensaje("No hay productos para añadir a la venta.");
+            }
+            
             return listaVenta;
 }
 
 
-        string msj;
+        string msj ;
         public void set_mensaje(string a)
         {
             msj = a;
@@ -119,7 +116,7 @@ namespace Logica
             {
                 return val;
             }
-            return "";
+            return "No hay productos alv tururuturu";
         }
         public void actualizarVenta(Venta venta)
         {
@@ -231,6 +228,40 @@ namespace Logica
 
             }
             return lista;
+        }
+        public Producto traerSeleccionado(string comando, string refer, string tallita)
+        {
+            DAOUsuario consul = new DAOUsuario();
+            DataTable pro = new DataTable();
+            Producto p = new Producto();
+            if(comando == "Select")
+            {
+                pro = consul.traerPrecio(refer, double.Parse(tallita));
+                for(int i =0; i< pro.Rows.Count; i++)
+                {
+                    
+                }
+            }
+            return p;
+        }
+
+        public double sumarTotal(List<Producto> listaV)
+        {
+            foreach (Producto p in listaV)
+            {
+                precioTotal = precioTotal + p.ValorTotal;
+            }
+            return precioTotal;
+        }
+
+        public void paraInvent(List<Producto> prod, string sede)
+        {
+            List<Producto> refresh = new List<Producto>();
+            refresh = (prod as List<Producto>);
+            foreach (Producto p in refresh)
+            {
+                actualizarInvent(sede.ToString(), p);
+            }
         }
     }
 }
