@@ -12,18 +12,8 @@ public partial class View_Tienda_MasterVendedor : System.Web.UI.MasterPage
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        if (Session["user_id"] == null || Session["clave"] == null || Convert.ToInt32(Session["rol_id"]) != 3)
-        {
-            this.cerrarSesion();
-            Response.Redirect("../Login-Rec/NuevoLogin.aspx");
-        }
-        else
-        {
-            Label_usuario.Text = Session["nombre"].ToString();
-            Label_Sede.Text = Session["sede"].ToString();
-        }
-        
-        
+        Label_usuario.Text = Session["nombre"].ToString();
+        Label_Sede.Text = Session["sede"].ToString();
     }
 
     protected void LinkButton2_Click(object sender, EventArgs e)

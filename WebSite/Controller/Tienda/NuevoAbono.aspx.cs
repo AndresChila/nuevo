@@ -70,12 +70,9 @@ public partial class View_Tienda_NuevoAbono : System.Web.UI.Page
     {
         listaVenta = new List<Producto>();
         DAOUsuario dAO = new DAOUsuario();
-
         listaVenta = (Session["refresh"] as List<Producto>);
-        foreach (Producto p in listaVenta)
-        {
-            dAO.actualizarInventario(p, Convert.ToString(Session["sede"]));
-        }
+        NuevosAbonos a = new NuevosAbonos(null, null, null, null);
+        a.actuInvent(listaVenta, Session["sede"].ToString());
 
 
     }

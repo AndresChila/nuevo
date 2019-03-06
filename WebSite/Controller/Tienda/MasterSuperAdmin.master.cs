@@ -15,8 +15,6 @@ public partial class View_Tienda_MasterTienda : System.Web.UI.MasterPage
         //Response.Redirect(superAdmin.validarSession(Session["user_id"].ToString(), Session["clave"].ToString(), Convert.ToInt32(Session["rol_id"])));        
         Label_Usuario.Text = Session["nombre"].ToString();
         L_Sede.Text = Session["sede"].ToString();
-        this.notificaciones();
-        this.notificaciones2();
     }
 
     protected void LinkButton2_Click(object sender, EventArgs e)
@@ -49,35 +47,6 @@ public partial class View_Tienda_MasterTienda : System.Web.UI.MasterPage
         this.cerrarSesion();
     }
 
- 
-    
-    void notificaciones()
-    {
-        DAOUsuario dAO = new DAOUsuario();
-        int a = dAO.Notificacion_Asignaciones();
-        if(a == 0)
-        {
-            L_c.Visible = false;
-        }
-        else
-        {
-            L_c.Text = Convert.ToString(a);
-        }
-    }
-
-    void notificaciones2()
-    {
-        DAOUsuario dAO = new DAOUsuario();
-        int a = dAO.Notificacion_Conflictos();
-        if(a == 0)
-        {
-            L_c1.Visible = false;
-        }
-        else
-        {
-            L_c1.Text = Convert.ToString(a);
-        }
-    }
 
     protected void LinkButton5_Click(object sender, EventArgs e)
     {

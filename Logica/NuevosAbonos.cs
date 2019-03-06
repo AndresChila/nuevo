@@ -118,5 +118,13 @@ namespace Logica
                 return true;
             }
         }
+        public void actuInvent(List<Producto> listaVenta, string sede)
+        {
+            DAOUsuario dAO = new DAOUsuario();
+            foreach (Producto p in listaVenta)
+            {
+                dAO.actualizarInventario(p, sede);
+            }
+        }
     }
 }
