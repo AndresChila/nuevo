@@ -229,7 +229,7 @@ namespace Logica
             }
             return lista;
         }
-        public Producto traerSeleccionado(string comando, string refer, string tallita)
+        /*public Producto traerSeleccionado(string comando, string refer, string tallita)
         {
             DAOUsuario consul = new DAOUsuario();
             DataTable pro = new DataTable();
@@ -243,7 +243,7 @@ namespace Logica
                 }
             }
             return p;
-        }
+        }*/
 
         public double sumarTotal(List<Producto> listaV)
         {

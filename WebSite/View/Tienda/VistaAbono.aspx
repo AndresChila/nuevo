@@ -6,7 +6,7 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" Runat="Server">
     <CR:CrystalReportSource ID="CrystalReportSource1" runat="server">
-        <Report FileName="C:\Users\ISAACELEAZAR\Desktop\2018-II\Ing de Software\SCA\View\Reportes\ReporteAbono.rpt">
+        <Report FileName="..\Reportes\ReporteAbono.rpt">
         </Report>
     </CR:CrystalReportSource>
     <CR:CrystalReportViewer ID="CrystalReportViewer1" runat="server" AutoDataBind="true" ReportSourceID="CrystalReportSource1" ToolPanelView="None" />
